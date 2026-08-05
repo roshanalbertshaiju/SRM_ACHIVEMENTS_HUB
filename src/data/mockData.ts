@@ -184,6 +184,8 @@ export const CAMPUS_FEED_ACHIEVEMENTS: Achievement[] = [
     reactions: { celebrate: 24, applaud: 12, inspired: 18, respect: 9 },
     rarity: 'Legendary',
     isPinned: true,
+    pinReason: 'Faculty Spotlight • Top Verified Win',
+    facultyPinned: true,
     comments: [
       {
         id: 'c1',
@@ -226,6 +228,8 @@ export const CAMPUS_FEED_ACHIEVEMENTS: Achievement[] = [
     reactions: { celebrate: 15, applaud: 28, inspired: 34, respect: 19 },
     rarity: 'Legendary',
     isPinned: true,
+    pinReason: 'Highest XP Awarded This Week',
+    facultyPinned: true,
     comments: [],
   },
   {

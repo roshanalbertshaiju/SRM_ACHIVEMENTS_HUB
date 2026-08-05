@@ -72,6 +72,8 @@ export interface Achievement {
   reactions?: AchievementReactions;
   rarity?: Rarity;
   isPinned?: boolean;
+  pinReason?: string;
+  facultyPinned?: boolean;
 }
 
 export interface StudentScores {

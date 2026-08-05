@@ -26,6 +26,7 @@ import {
   TrendingUp,
   Crown,
   Zap,
+  Plus,
   Radio,
 } from 'lucide-react';
 import { useApp } from '@/context/AppContext';
@@ -269,11 +270,17 @@ export const StudentDashboardScreen: React.FC = () => {
               </p>
             </div>
 
+            {/* Secondary Neutral Feed Header Action */}
             <button
               onClick={() => setIsAddModalOpen(true)}
-              className="px-3.5 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs shadow-sm flex items-center space-x-1.5 transition-all tactile-btn"
+              className={cn(
+                "px-3.5 py-2 rounded-xl border text-xs font-bold flex items-center space-x-1.5 transition-all active:scale-95 min-h-[44px]",
+                isLight
+                  ? "bg-slate-100 border-slate-300 text-slate-700 hover:bg-slate-200"
+                  : "bg-slate-800/60 border-slate-700 text-slate-300 hover:bg-slate-800"
+              )}
             >
-              <Rocket className="w-3.5 h-3.5" />
+              <Rocket className="w-3.5 h-3.5 text-amber-500" />
               <span>Post Win</span>
             </button>
           </div>
@@ -284,40 +291,49 @@ export const StudentDashboardScreen: React.FC = () => {
               <img src={currentStudent.avatar} alt={currentStudent.name} className="w-9 h-9 rounded-full object-cover border border-amber-500/30" />
               <button
                 onClick={() => setIsAddModalOpen(true)}
-                className={cn("flex-1 text-left px-4 py-2.5 rounded-full border text-xs transition-all", isLight ? "bg-slate-100 border-slate-200 text-slate-500 hover:bg-slate-200" : "bg-slate-800/60 border-slate-700 text-slate-400 hover:bg-slate-800")}
+                className={cn("flex-1 text-left px-4 py-2.5 rounded-full border text-xs transition-all min-h-[44px]", isLight ? "bg-slate-100 border-slate-200 text-slate-500 hover:bg-slate-200" : "bg-slate-800/60 border-slate-700 text-slate-400 hover:bg-slate-800")}
               >
                 Share a verified hackathon win, IEEE paper, or PR...
               </button>
             </div>
 
             <div className={cn("flex items-center justify-between pt-2 border-t text-xs", isLight ? "border-slate-200" : "border-slate-800")}>
-              <button onClick={() => setIsAddModalOpen(true)} className="flex items-center space-x-1.5 text-amber-500 font-bold hover:underline">
+              <button onClick={() => setIsAddModalOpen(true)} className="min-h-[44px] flex items-center space-x-1.5 text-amber-500 font-bold hover:underline px-2 active:scale-95 transition-transform">
                 <Trophy className="w-4 h-4 text-amber-500" />
                 <span>Hackathon Win</span>
               </button>
-              <button onClick={() => setIsAddModalOpen(true)} className="flex items-center space-x-1.5 text-amber-500 font-bold hover:underline">
+              <button onClick={() => setIsAddModalOpen(true)} className="min-h-[44px] flex items-center space-x-1.5 text-amber-500 font-bold hover:underline px-2 active:scale-95 transition-transform">
                 <BookOpen className="w-4 h-4 text-amber-500" />
                 <span>Research Paper</span>
               </button>
-              <button onClick={() => setIsAddModalOpen(true)} className="flex items-center space-x-1.5 text-emerald-500 font-bold hover:underline">
+              <button onClick={() => setIsAddModalOpen(true)} className="min-h-[44px] flex items-center space-x-1.5 text-emerald-500 font-bold hover:underline px-2 active:scale-95 transition-transform">
                 <Award className="w-4 h-4 text-emerald-500" />
                 <span>Certification</span>
               </button>
             </div>
           </GlassCard>
 
-          {/* Pinned Highlights */}
+          {/* Pinned Highlights with Explicit Criterion Labels */}
           {pinnedAchievements.length > 0 && (
-            <div className={cn("p-3.5 rounded-2xl border space-y-2", isLight ? "bg-slate-50 border-slate-200 text-slate-900" : "bg-slate-800/40 border-slate-700 text-slate-100")}>
-              <div className="flex items-center space-x-1.5 text-amber-500 text-xs font-bold">
-                <Pin className="w-3.5 h-3.5 fill-amber-500 text-amber-500" />
-                <span>Pinned Highlights</span>
+            <div className={cn("p-4 rounded-2xl border space-y-3", isLight ? "bg-slate-50 border-slate-200 text-slate-900" : "bg-slate-800/40 border-slate-700 text-slate-100")}>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-1.5 text-amber-500 text-xs font-bold">
+                  <Pin className="w-3.5 h-3.5 fill-amber-500 text-amber-500" />
+                  <span>Pinned Highlights</span>
+                </div>
+                <span className="text-[10px] font-semibold text-slate-400">Faculty Spotlight & Top XP</span>
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
                 {pinnedAchievements.map((ach) => (
-                  <div key={ach.id} className={cn("p-2.5 rounded-xl border space-y-1", isLight ? "bg-white border-slate-200" : "bg-slate-900/60 border-slate-700")}>
-                    <span className="text-[10px] text-amber-500 font-bold block">{ach.category}</span>
-                    <h5 className={cn("font-bold text-[11px] line-clamp-1", isLight ? "text-slate-900" : "text-slate-100")}>{ach.title}</h5>
+                  <div key={ach.id} className={cn("p-3 rounded-xl border space-y-1.5 flex flex-col justify-between transition-all hover:border-amber-500/40", isLight ? "bg-white border-slate-200" : "bg-slate-900/60 border-slate-700")}>
+                    <div className="flex items-center justify-between">
+                      <span className="text-[9px] font-extrabold text-amber-500 bg-amber-500/10 px-2 py-0.5 rounded-full border border-amber-500/20 truncate max-w-full">
+                        {ach.pinReason || (ach.pointsEarned >= 800 ? 'Highest XP Awarded This Week' : 'Faculty Spotlight • Top Verified Win')}
+                      </span>
+                    </div>
+                    <h5 className={cn("font-bold text-xs line-clamp-1 pt-0.5", isLight ? "text-slate-900" : "text-slate-100")}>{ach.title}</h5>
+                    <p className={cn("text-[10px] line-clamp-1 font-numeric", isLight ? "text-slate-500" : "text-slate-400")}>{ach.category} • +{ach.pointsEarned} XP</p>
                   </div>
                 ))}
               </div>
@@ -426,13 +442,13 @@ export const StudentDashboardScreen: React.FC = () => {
                   </div>
 
                   {/* 4. MULTI-REACTION BAR (LINKEDIN STYLE) */}
-                  <div className={cn("flex items-center justify-between pt-3 border-t text-xs relative", isLight ? "border-slate-200" : "border-slate-800")}>
+                  <div className={cn("flex items-center justify-between pt-3 border-t text-xs relative flex-wrap gap-2", isLight ? "border-slate-200" : "border-slate-800")}>
                     {/* Reaction Picker Button */}
                     <div className="relative">
                       <button
                         onClick={() => setActiveReactionPickerAchId(activeReactionPickerAchId === ach.id ? null : ach.id)}
                         className={cn(
-                          "flex items-center space-x-1.5 px-3 py-1.5 rounded-lg font-bold transition-all tactile-btn",
+                          "min-h-[44px] min-w-[44px] flex items-center space-x-2 px-3.5 py-2 rounded-xl font-bold transition-all active:scale-95 tactile-btn",
                           ach.userReaction
                             ? "bg-amber-500/20 text-amber-500 border border-amber-500/40"
                             : isLight
@@ -440,7 +456,7 @@ export const StudentDashboardScreen: React.FC = () => {
                             : "text-slate-300 hover:bg-slate-800"
                         )}
                       >
-                        <span>{ach.userReaction ? REACTION_EMOJIS[ach.userReaction].emoji : '🎉'}</span>
+                        <span className="text-base">{ach.userReaction ? REACTION_EMOJIS[ach.userReaction].emoji : '🎉'}</span>
                         <span>{ach.userReaction ? REACTION_EMOJIS[ach.userReaction].label : 'Celebrate'}</span>
                       </button>
 
@@ -452,7 +468,7 @@ export const StudentDashboardScreen: React.FC = () => {
                             animate={{ opacity: 1, scale: 1, y: 0 }}
                             exit={{ opacity: 0, scale: 0.9, y: 10 }}
                             className={cn(
-                              "absolute bottom-full left-0 mb-2 p-1.5 rounded-full border shadow-2xl flex items-center space-x-1 z-30",
+                              "absolute bottom-full left-0 mb-2 p-2 rounded-full border shadow-2xl flex items-center gap-2 z-30",
                               isLight ? "bg-white border-slate-300" : "bg-slate-900 border-slate-700"
                             )}
                           >
@@ -465,7 +481,7 @@ export const StudentDashboardScreen: React.FC = () => {
                                     toggleReaction(ach.id, rKey);
                                     setActiveReactionPickerAchId(null);
                                   }}
-                                  className="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 hover:scale-125 transition-all text-base"
+                                  className="min-w-[44px] min-h-[44px] p-2.5 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 hover:scale-125 active:scale-90 transition-all text-xl flex items-center justify-center"
                                   title={r.label}
                                 >
                                   {r.emoji}
@@ -480,7 +496,7 @@ export const StudentDashboardScreen: React.FC = () => {
                     {/* Reaction Summary Counters */}
                     <div className="flex items-center space-x-2 text-[11px] text-slate-400 font-medium">
                       {ach.reactions && (
-                        <div className="flex items-center space-x-1.5 font-numeric">
+                        <div className="flex items-center space-x-2 font-numeric">
                           {ach.reactions.celebrate > 0 && <span>🎉 {ach.reactions.celebrate}</span>}
                           {ach.reactions.applaud > 0 && <span>👏 {ach.reactions.applaud}</span>}
                           {ach.reactions.inspired > 0 && <span>🔥 {ach.reactions.inspired}</span>}
@@ -492,7 +508,7 @@ export const StudentDashboardScreen: React.FC = () => {
                     {/* Comments Toggle */}
                     <button
                       onClick={() => setOpenCommentAchId(openCommentAchId === ach.id ? null : ach.id)}
-                      className={cn("flex items-center space-x-1.5 px-3 py-1.5 rounded-lg transition-colors font-bold tactile-btn", isLight ? "text-slate-700 hover:bg-slate-100" : "text-slate-300 hover:bg-slate-800", openCommentAchId === ach.id && "text-amber-500")}
+                      className={cn("min-h-[44px] flex items-center space-x-1.5 px-3.5 py-2 rounded-xl transition-all font-bold active:scale-95 tactile-btn", isLight ? "text-slate-700 hover:bg-slate-100" : "text-slate-300 hover:bg-slate-800", openCommentAchId === ach.id && "text-amber-500")}
                     >
                       <MessageSquare className="w-4 h-4" />
                       <span>Comments ({ach.comments.length})</span>
@@ -501,7 +517,7 @@ export const StudentDashboardScreen: React.FC = () => {
                     {/* Share Button */}
                     <button
                       onClick={() => handleSharePost(ach)}
-                      className={cn("flex items-center space-x-1.5 px-3 py-1.5 rounded-lg transition-colors font-bold tactile-btn", isLight ? "text-slate-700 hover:bg-slate-100" : "text-slate-300 hover:bg-slate-800")}
+                      className={cn("min-h-[44px] flex items-center space-x-1.5 px-3.5 py-2 rounded-xl transition-all font-bold active:scale-95 tactile-btn", isLight ? "text-slate-700 hover:bg-slate-100" : "text-slate-300 hover:bg-slate-800")}
                     >
                       <ExternalLink className="w-4 h-4" />
                       <span>Share Card</span>
@@ -624,6 +640,17 @@ export const StudentDashboardScreen: React.FC = () => {
 
       {/* 11. LIVE TOAST ANIMATIONS */}
       <LiveToastNotifier />
+
+      {/* Mobile Floating Action Button (Sticky Bottom-Right Thumb-Reachable Zone) */}
+      <motion.button
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
+        onClick={() => setIsAddModalOpen(true)}
+        className="fixed bottom-20 right-4 lg:hidden z-40 p-3.5 rounded-full bg-amber-500 hover:bg-amber-400 text-slate-950 shadow-2xl shadow-amber-500/40 flex items-center justify-center transition-all min-w-[52px] min-h-[52px] ring-2 ring-amber-400/50"
+        title="Share Achievement"
+      >
+        <Plus className="w-6 h-6 stroke-[2.5]" />
+      </motion.button>
     </div>
   );
 };
