@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 import { Student, Achievement, ThemeId, NotificationItem, SeasonInfo, ReactionType } from '@/types';
 import { STUDENTS, RECRUITERS, INITIAL_NOTIFICATIONS, INITIAL_SEASON_INFO } from '@/data/mockData';
 import { THEMES as ThemeMap, ThemeConfig } from '@/styles/themes';
@@ -54,44 +54,40 @@ const LOCAL_STORAGE_KEY_CURRENT_STU = 'cse_hub_current_stu_v1';
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [activeScreen, setActiveScreen] = useState<ScreenType>('dashboard');
 
-  const [students, setStudents] = useState<Student[]>(() => {
-    if (typeof window !== 'undefined') {
-      try {
-        const saved = localStorage.getItem(LOCAL_STORAGE_KEY_STUDENTS);
-        if (saved) return JSON.parse(saved);
-      } catch (e) {
-        console.error('Failed to parse saved students', e);
-      }
-    }
-    return STUDENTS;
-  });
-
+  // SSR-safe initial state — always start with defaults so server and client
+  // render identical HTML on first paint, avoiding hydration mismatches.
+  const [students, setStudents] = useState<Student[]>(STUDENTS);
   const [notifications, setNotifications] = useState<NotificationItem[]>(INITIAL_NOTIFICATIONS);
   const [seasonInfo] = useState<SeasonInfo>(INITIAL_SEASON_INFO);
+  const [currentStudentId, setCurrentStudentIdState] = useState<string>('stu-1');
+  const [activeTheme, setActiveTheme] = useState<ThemeId>('dark');
 
-  const [currentStudentId, setCurrentStudentIdState] = useState<string>(() => {
-    if (typeof window !== 'undefined') {
-      try {
-        const saved = localStorage.getItem(LOCAL_STORAGE_KEY_CURRENT_STU);
-        if (saved) return saved;
-      } catch (e) {
-        console.error('Failed to get saved student ID', e);
+  // After first client render, hydrate state from localStorage.
+  useEffect(() => {
+    try {
+      const savedTheme = localStorage.getItem(LOCAL_STORAGE_KEY_THEME);
+      if (savedTheme === 'light' || savedTheme === 'dark') {
+        setActiveTheme(savedTheme as ThemeId);
       }
+    } catch (e) {
+      console.error('Failed to get saved theme', e);
     }
-    return 'stu-1';
-  });
 
-  const [activeTheme, setActiveTheme] = useState<ThemeId>(() => {
-    if (typeof window !== 'undefined') {
-      try {
-        const saved = localStorage.getItem(LOCAL_STORAGE_KEY_THEME);
-        if (saved === 'light' || saved === 'dark') return saved as ThemeId;
-      } catch (e) {
-        console.error('Failed to get saved theme', e);
-      }
+    try {
+      const savedStudentId = localStorage.getItem(LOCAL_STORAGE_KEY_CURRENT_STU);
+      if (savedStudentId) setCurrentStudentIdState(savedStudentId);
+    } catch (e) {
+      console.error('Failed to get saved student ID', e);
     }
-    return 'dark';
-  });
+
+    try {
+      const savedStudents = localStorage.getItem(LOCAL_STORAGE_KEY_STUDENTS);
+      if (savedStudents) setStudents(JSON.parse(savedStudents));
+    } catch (e) {
+      console.error('Failed to parse saved students', e);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // intentionally empty — runs once after mount
 
   const [isAddModalOpen, setIsAddModalOpen] = useState<boolean>(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState<boolean>(false);

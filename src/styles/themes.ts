@@ -36,8 +36,8 @@ export const THEMES: Record<ThemeId, ThemeConfig> = {
     textPrimary: 'text-slate-100',
     textSecondary: 'text-slate-400',
     accentGradient: 'from-amber-400 via-indigo-400 to-amber-500',
-    accentColor: '#F59E0B',
-    glowColor: 'rgba(245, 158, 11, 0.08)',
+    accentColor: '#F5A623',
+    glowColor: 'rgba(245, 166, 35, 0.10)',
     badgeStyle: 'bg-amber-500/10 text-amber-300 border border-amber-500/20',
   },
   light: {

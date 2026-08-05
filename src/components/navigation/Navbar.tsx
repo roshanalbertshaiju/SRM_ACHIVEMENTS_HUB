@@ -26,6 +26,7 @@ import {
 } from 'lucide-react';
 import { useApp, ScreenType } from '@/context/AppContext';
 import { NotificationDrawer } from '@/components/ui/NotificationDrawer';
+import { BrandLogo } from '@/components/ui/BrandLogo';
 import { cn } from '@/lib/utils';
 
 export const Navbar: React.FC = () => {
@@ -123,26 +124,8 @@ export const Navbar: React.FC = () => {
         themeConfig.navBgClass
       )}
     >
-      {/* ================= LEFT: AUTHENTIC CSEHUB BRAND LOGO ================= */}
-      <div
-        onClick={() => setActiveScreen('dashboard')}
-        className="flex items-center space-x-3 cursor-pointer group flex-shrink-0"
-      >
-        <div className="w-9 h-9 rounded-xl bg-slate-900 border border-slate-700/80 flex items-center justify-center shadow-sm group-hover:border-amber-500/50 transition-colors">
-          <svg className="w-5 h-5 text-amber-400" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M16 3L4 8V16C4 23.5 9.2 29.8 16 31C22.8 29.8 28 23.5 28 16V8L16 3Z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round" fill="rgba(245,158,11,0.1)"/>
-            <path d="M16 8L18.8 13.6L25 14.5L20.5 18.9L21.6 25L16 22.1L10.4 25L11.5 18.9L7 14.5L13.2 13.6L16 8Z" fill="currentColor"/>
-          </svg>
-        </div>
-
-        <div>
-          <div className="flex items-center space-x-1 font-black text-sm tracking-tight leading-none">
-            <span className={isLight ? "text-slate-900" : "text-slate-100"}>SRM</span>
-            <span className="text-amber-400 font-black">Hub</span>
-          </div>
-          <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block pt-0.5">Student Network</span>
-        </div>
-      </div>
+      {/* ================= LEFT: AUTHENTIC BRAND LOGO ================= */}
+      <BrandLogo onClick={() => setActiveScreen('dashboard')} />
 
       {/* ================= CENTER: INTEGRATED RAYCAST SEARCH & UNDERLINE NAV ================= */}
       <div className="flex-1 max-w-3xl flex items-center justify-center space-x-6">

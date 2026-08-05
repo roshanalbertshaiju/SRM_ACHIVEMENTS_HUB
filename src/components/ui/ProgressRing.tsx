@@ -51,8 +51,8 @@ export const ProgressRing: React.FC<ProgressRingProps> = ({
         </svg>
 
         <div className="absolute flex flex-col items-center justify-center text-center">
-          <span className="text-xl font-bold tracking-tight">{value}%</span>
-          {sublabel && <span className="text-[10px] opacity-60 font-medium">{sublabel}</span>}
+          <span className="stat-number text-sm">{value}%</span>
+          {sublabel && <span className="text-[9px] opacity-60 font-medium">{sublabel}</span>}
         </div>
       </div>
       {label && <span className="text-xs font-semibold tracking-tight">{label}</span>}

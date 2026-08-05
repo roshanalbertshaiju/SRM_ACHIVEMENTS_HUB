@@ -142,66 +142,8 @@ export const LeaderboardScreen: React.FC = () => {
 
       {/* TAB CONTENT 1: DEPARTMENT BATTLE ARENA */}
       {activeTab === 'battle' && (
-        <div className="space-y-8 animate-in fade-in duration-300">
-          {/* Main Rivalry Banner */}
-          <GlassCard className="p-6 sm:p-8 space-y-6 border-amber-500/30 bg-gradient-to-r from-amber-500/10 via-amber-500/5 to-transparent">
-            <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border-b pb-6 border-amber-500/20">
-              <div className="space-y-1">
-                <div className="flex items-center space-x-2">
-                  <Crown className="w-6 h-6 text-amber-500" />
-                  <h2 className={cn("text-2xl font-black tracking-tight", isLight ? "text-slate-900" : "text-slate-100")}>Department Rivalry Arena</h2>
-                  <span className="px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-500 dark:text-amber-400 text-xs font-bold border border-amber-500/30">Season 3</span>
-                </div>
-                <p className={cn("text-xs font-medium", isLight ? "text-slate-600" : "text-slate-400")}>
-                  Inter-department competition. Verified XP earned by any student lifts their department's campus standing.
-                </p>
-              </div>
-
-              <div className={cn("p-4 rounded-2xl border text-center font-numeric shadow-sm", isLight ? "bg-amber-50 border-amber-200" : "bg-amber-500/10 border-amber-500/30")}>
-                <span className="text-2xl font-black text-amber-500 dark:text-amber-400 block">+440 XP</span>
-                <span className="text-[10px] font-bold uppercase text-amber-600 dark:text-amber-300">CSE Department Lead</span>
-              </div>
-            </div>
-
-            {/* Department Battle Live Chart Component */}
-            <DepartmentBattleCard />
-          </GlassCard>
-
-          {/* Department Standings Breakdown Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {DEPT_BATTLE_STATS.map((dept) => (
-              <GlassCard key={dept.code} className="p-6 space-y-4">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-3">
-                    <div className="w-12 h-12 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center font-black text-lg text-amber-500 font-numeric">
-                      #{dept.rank}
-                    </div>
-                    <div>
-                      <h3 className={cn("font-bold text-base", isLight ? "text-slate-900" : "text-slate-100")}>{dept.code} ({dept.name})</h3>
-                      <p className="text-xs text-amber-500 font-semibold">{dept.lead}</p>
-                    </div>
-                  </div>
-
-                  <span className="text-xl font-black text-amber-500 dark:text-amber-400 font-numeric">{dept.xp.toLocaleString()} XP</span>
-                </div>
-
-                <div className={cn("grid grid-cols-3 gap-2 pt-3 border-t text-center text-xs", isLight ? "border-slate-200" : "border-slate-800")}>
-                  <div className={cn("p-2 rounded-xl border", isLight ? "bg-slate-50 border-slate-200" : "bg-slate-800/40 border-slate-700/60")}>
-                    <span className={cn("text-xs font-bold block truncate", isLight ? "text-slate-900" : "text-slate-100")}>{dept.mvp}</span>
-                    <span className={cn("text-[10px] uppercase font-bold", isLight ? "text-slate-500" : "text-slate-400")}>Top Contributor</span>
-                  </div>
-                  <div className={cn("p-2 rounded-xl border", isLight ? "bg-slate-50 border-slate-200" : "bg-slate-800/40 border-slate-700/60")}>
-                    <span className="text-xs font-bold text-emerald-500 block font-numeric">{dept.papers} DOIs</span>
-                    <span className={cn("text-[10px] uppercase font-bold", isLight ? "text-slate-500" : "text-slate-400")}>IEEE Papers</span>
-                  </div>
-                  <div className={cn("p-2 rounded-xl border", isLight ? "bg-slate-50 border-slate-200" : "bg-slate-800/40 border-slate-700/60")}>
-                    <span className="text-xs font-bold text-amber-500 block font-numeric">{dept.hackathons} Wins</span>
-                    <span className={cn("text-[10px] uppercase font-bold", isLight ? "text-slate-500" : "text-slate-400")}>Hackathons</span>
-                  </div>
-                </div>
-              </GlassCard>
-            ))}
-          </div>
+        <div className="space-y-6 animate-in fade-in duration-300">
+          <DepartmentBattleCard />
         </div>
       )}
 

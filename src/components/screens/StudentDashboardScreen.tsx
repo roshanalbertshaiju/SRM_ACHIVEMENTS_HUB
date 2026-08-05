@@ -28,6 +28,8 @@ import {
   Zap,
   Plus,
   Radio,
+  FileText,
+  Code2,
 } from 'lucide-react';
 import { useApp } from '@/context/AppContext';
 import { XPBar } from '@/components/ui/XPBar';
@@ -36,7 +38,8 @@ import { ActivityHeatmap } from '@/components/ui/ActivityHeatmap';
 import { ProofViewerModal } from '@/components/ui/ProofViewerModal';
 import { LiveToastNotifier } from '@/components/ui/LiveToastNotifier';
 import { DepartmentBattleCard } from '@/components/ui/DepartmentBattleCard';
-import { Achievement, ReactionType } from '@/types';
+import { ProgressRing } from '@/components/ui/ProgressRing';
+import { Achievement, ReactionType, Rarity } from '@/types';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
 
@@ -45,6 +48,34 @@ const REACTION_EMOJIS: Record<ReactionType, { emoji: string; label: string; colo
   applaud: { emoji: '👏', label: 'Applaud', color: 'text-emerald-500' },
   inspired: { emoji: '🔥', label: 'Inspired', color: 'text-amber-500' },
   respect: { emoji: '⭐', label: 'Respect', color: 'text-amber-500' },
+};
+
+// Rarity tier config — colors reference the CSS tokens defined in globals.css
+const RARITY_CONFIG: Record<Rarity, { cardClass: string; pillColor: string; pillBg: string; label: string }> = {
+  Legendary: {
+    cardClass: 'rarity-legendary',
+    pillColor: '#C084FC',
+    pillBg: 'rgba(192, 132, 252, 0.12)',
+    label: 'Legendary',
+  },
+  Epic: {
+    cardClass: 'rarity-epic',
+    pillColor: '#FB923C',
+    pillBg: 'rgba(251, 146, 60, 0.12)',
+    label: 'Epic',
+  },
+  Rare: {
+    cardClass: 'rarity-rare',
+    pillColor: '#38BDF8',
+    pillBg: 'rgba(56, 189, 248, 0.10)',
+    label: 'Rare',
+  },
+  Common: {
+    cardClass: 'rarity-common',
+    pillColor: '',
+    pillBg: '',
+    label: 'Common',
+  },
 };
 
 import confetti from 'canvas-confetti';
@@ -144,25 +175,29 @@ export const StudentDashboardScreen: React.FC = () => {
               <div className="space-y-1">
                 <h2 className={cn("font-extrabold text-sm flex items-center justify-center space-x-1", isLight ? "text-slate-900" : "text-slate-100")}>
                   <span>{currentStudent.name}</span>
-                  <ShieldCheck className="w-4 h-4 text-emerald-500" />
+                  {/* Inline verification — not a competing pill, just a checkmark */}
+                  <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
                 </h2>
-                
-                {/* 14. IDENTITY TITLE */}
-                <div className={cn("inline-block px-2.5 py-0.5 rounded-full font-bold text-[11px] border", isLight ? "bg-slate-100 border-slate-200 text-slate-700" : "bg-slate-800 border-slate-700 text-slate-300")}>
-                  🏆 Campus Innovator
+
+                {/* Identity title — Crown icon replaces emoji */}
+                <div className={cn("inline-flex items-center space-x-1 px-2.5 py-0.5 rounded-full font-bold text-[11px] border", isLight ? "bg-slate-100 border-slate-200 text-slate-700" : "bg-slate-800 border-slate-700 text-slate-300")}>
+                  <Crown className="w-3 h-3" style={{ color: '#F5A623' }} />
+                  <span>Campus Innovator</span>
                 </div>
 
                 <p className={cn("text-[10px]", isLight ? "text-slate-500" : "text-slate-400")}>
-                  Level {currentStudent.level} • {currentStudent.department}
+                  <span className="stat-number" style={{ color: '#F5A623' }}>Lv{currentStudent.level}</span>
+                  {' '}&bull;{' '}{currentStudent.department}
                 </p>
               </div>
 
-              {/* Compact Reputation Widget Box */}
-              <div className={cn("p-3 rounded-2xl border text-xs space-y-2 text-center", isLight ? "bg-slate-50 border-slate-200" : "bg-slate-800/40 border-slate-700/60")}>
+              {/* Compact Reputation Widget — stat-number treatment */}
+              <div className={cn("p-3 rounded-2xl border text-xs space-y-1 text-center", isLight ? "bg-slate-50 border-slate-200" : "bg-slate-800/40 border-slate-700/60")}>
                 <div className={cn("text-[10px] uppercase tracking-widest font-bold", isLight ? "text-slate-500" : "text-slate-400")}>Career Reputation</div>
                 <div className="flex items-center justify-center">
-                  <span className="text-xl font-black text-amber-500 dark:text-amber-400 font-numeric">{currentStudent.careerScore}</span>
+                  <span className="stat-number text-2xl" style={{ color: '#F5A623' }}>{currentStudent.careerScore}</span>
                 </div>
+                <div className={cn("text-[9px] font-semibold", isLight ? "text-slate-400" : "text-slate-500")}>/1000 pts</div>
               </div>
 
               {/* XP Progression Bar */}
@@ -248,8 +283,8 @@ export const StudentDashboardScreen: React.FC = () => {
                   <span>Need +{seasonInfo.neededXP} XP</span>
                   <span>to enter Top 10</span>
                 </div>
-                <div className={cn("h-1.5 w-full rounded-full overflow-hidden", isLight ? "bg-slate-200" : "bg-slate-800")}>
-                  <div className="h-full w-[72%] bg-amber-500 rounded-full" />
+                <div className={cn("h-1.5 w-full rounded-full overflow-hidden", isLight ? "bg-slate-200" : "bg-slate-900")}>
+                  <div className="h-full w-[72%] rounded-full" style={{ background: 'linear-gradient(90deg, #E8960F 0%, #F5A623 55%, #FBCB6A 100%)' }} />
                 </div>
               </div>
             </div>
@@ -263,7 +298,9 @@ export const StudentDashboardScreen: React.FC = () => {
           <div className="flex items-center justify-between">
             <div>
               <h1 className={cn("text-xl font-black flex items-center space-x-2 tracking-tight", isLight ? "text-slate-900" : "text-white")}>
-                <span>⚡ Campus Pulse</span>
+                {/* Zap icon replaces ⚡ emoji — consistent with lucide line-icon system */}
+                <Zap className="w-5 h-5" style={{ color: '#F5A623' }} />
+                <span>Campus Pulse</span>
               </h1>
               <p className={cn("text-xs", isLight ? "text-slate-500" : "text-slate-400")}>
                 The live heartbeat of university achievements, papers, and hackathons
@@ -317,8 +354,8 @@ export const StudentDashboardScreen: React.FC = () => {
           {pinnedAchievements.length > 0 && (
             <div className={cn("p-4 rounded-2xl border space-y-3", isLight ? "bg-slate-50 border-slate-200 text-slate-900" : "bg-slate-800/40 border-slate-700 text-slate-100")}>
               <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-1.5 text-amber-500 text-xs font-bold">
-                  <Pin className="w-3.5 h-3.5 fill-amber-500 text-amber-500" />
+                <div className="flex items-center space-x-1.5 text-xs font-bold" style={{ color: '#F5A623' }}>
+                  <Pin className="w-3.5 h-3.5 fill-current" />
                   <span>Pinned Highlights</span>
                 </div>
                 <span className="text-[10px] font-semibold text-slate-400">Faculty Spotlight & Top XP</span>
@@ -327,13 +364,20 @@ export const StudentDashboardScreen: React.FC = () => {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
                 {pinnedAchievements.map((ach) => (
                   <div key={ach.id} className={cn("p-3 rounded-xl border space-y-1.5 flex flex-col justify-between transition-all hover:border-amber-500/40", isLight ? "bg-white border-slate-200" : "bg-slate-900/60 border-slate-700")}>
-                    <div className="flex items-center justify-between">
-                      <span className="text-[9px] font-extrabold text-amber-500 bg-amber-500/10 px-2 py-0.5 rounded-full border border-amber-500/20 truncate max-w-full">
+                    {/* Pin reason gets a Pin icon prefix — structurally different from tier pills */}
+                    <div className="flex items-start space-x-1">
+                      <Pin className="w-2.5 h-2.5 mt-0.5 flex-shrink-0" style={{ color: '#F5A623' }} />
+                      <span
+                        className="text-[9px] font-extrabold leading-snug"
+                        style={{ color: '#F5A623' }}
+                      >
                         {ach.pinReason || (ach.pointsEarned >= 800 ? 'Highest XP Awarded This Week' : 'Faculty Spotlight • Top Verified Win')}
                       </span>
                     </div>
-                    <h5 className={cn("font-bold text-xs line-clamp-1 pt-0.5", isLight ? "text-slate-900" : "text-slate-100")}>{ach.title}</h5>
-                    <p className={cn("text-[10px] line-clamp-1 font-numeric", isLight ? "text-slate-500" : "text-slate-400")}>{ach.category} • +{ach.pointsEarned} XP</p>
+                    <h5 className={cn("font-bold text-xs line-clamp-1", isLight ? "text-slate-900" : "text-slate-100")}>{ach.title}</h5>
+                    <p className={cn("text-[10px] line-clamp-1", isLight ? "text-slate-500" : "text-slate-400")}>
+                      {ach.category} • <span className="stat-number" style={{ color: '#F5A623' }}>+{ach.pointsEarned} XP</span>
+                    </p>
                   </div>
                 ))}
               </div>
@@ -343,34 +387,56 @@ export const StudentDashboardScreen: React.FC = () => {
           {/* 3. SOCIAL ACHIEVEMENT POST CARDS */}
           <div className="space-y-4">
             {currentStudent.achievements.map((ach) => {
+              // Rarity: left-border accent from CSS class + colored pill
+              const rarityInfo = ach.rarity ? RARITY_CONFIG[ach.rarity] : null;
+
               return (
-                <GlassCard key={ach.id} className="p-6 space-y-3.5">
+                <GlassCard
+                  key={ach.id}
+                  className={cn('p-6 space-y-3.5', rarityInfo?.cardClass)}
+                >
                   {/* Author & Header */}
                   <div className="flex items-start justify-between">
                     <div className="flex items-center space-x-3">
                       <img src={ach.studentAvatar} alt={ach.studentName} className={cn("w-10 h-10 rounded-full object-cover border", isLight ? "border-slate-200" : "border-slate-700")} />
                       <div>
-                        <div className="flex items-center space-x-2">
+                        <div className="flex items-center flex-wrap gap-1.5">
                           <h3 className={cn("font-bold text-sm", isLight ? "text-slate-900" : "text-slate-100")}>{ach.studentName}</h3>
-                          <span className={cn("text-[9px] font-extrabold px-1.5 py-0.5 rounded border", isLight ? "bg-slate-100 border-slate-300 text-slate-700" : "bg-slate-800 border-slate-700 text-slate-300")}>
-                            Campus Innovator
-                          </span>
-                          <span className="text-[10px] font-semibold text-emerald-500 flex items-center space-x-0.5 bg-emerald-500/10 px-1.5 py-0.5 rounded border border-emerald-500/20">
-                            <CheckCircle2 className="w-3 h-3 text-emerald-500" />
-                            <span>{ach.verificationStatus}</span>
-                          </span>
+                          {/* Verification: inline checkmark, not a competing pill */}
+                          {ach.verificationStatus === 'Faculty Verified' && (
+                            <span className="inline-flex items-center space-x-0.5 text-[10px] font-bold text-emerald-400">
+                              <ShieldCheck className="w-3 h-3" />
+                              <span>Faculty Verified</span>
+                            </span>
+                          )}
+                          {ach.verificationStatus !== 'Faculty Verified' && (
+                            <span className={cn(
+                              "text-[9px] font-semibold px-1.5 py-0.5 rounded border",
+                              isLight ? "bg-slate-100 border-slate-300 text-slate-600" : "bg-slate-800 border-slate-700 text-slate-400"
+                            )}>
+                              {ach.verificationStatus}
+                            </span>
+                          )}
                         </div>
-                        <p className={cn("text-[11px]", isLight ? "text-slate-500" : "text-slate-400")}>{ach.studentDept} • {ach.date}</p>
+                        <p className={cn("text-[11px] mt-0.5", isLight ? "text-slate-500" : "text-slate-400")}>{ach.studentDept} • {ach.date}</p>
                       </div>
                     </div>
 
-                    <div className="text-right">
-                      <span className="text-xs font-black text-amber-500 dark:text-amber-400 bg-amber-500/10 px-2.5 py-1 rounded-xl border border-amber-500/20 block font-numeric">
+                    <div className="text-right space-y-1">
+                      {/* XP — stat-number role */}
+                      <span
+                        className="stat-number text-xs block px-2.5 py-1 rounded-xl border"
+                        style={{ color: '#F5A623', background: 'rgba(245, 166, 35, 0.08)', borderColor: 'rgba(245, 166, 35, 0.20)' }}
+                      >
                         +{ach.pointsEarned} XP
                       </span>
-                      {ach.rarity && (
-                        <span className={cn("text-[9px] font-bold uppercase block mt-1 text-slate-400")}>
-                          {ach.rarity}
+                      {/* Rarity pill — colored by tier, NOT pill-shaped like verification */}
+                      {rarityInfo && ach.rarity !== 'Common' && (
+                        <span
+                          className="text-[9px] font-black uppercase tracking-wider block px-2 py-0.5 rounded-md text-center"
+                          style={{ color: rarityInfo.pillColor, background: rarityInfo.pillBg }}
+                        >
+                          {rarityInfo.label}
                         </span>
                       )}
                     </div>
@@ -586,38 +652,40 @@ export const StudentDashboardScreen: React.FC = () => {
             </span>
 
             <div className="space-y-2.5">
-              <div className={cn("p-3 rounded-xl border space-y-1.5", isLight ? "bg-slate-50 border-slate-200" : "bg-slate-800/40 border-slate-700/60")}>
-                <div className="flex items-center justify-between">
-                  <span className={cn("font-bold text-xs", isLight ? "text-slate-900" : "text-slate-100")}>Google AI HackMIT 2026</span>
-                  <span className="text-[9px] font-black text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded border border-emerald-500/20 font-numeric">
-                    94% Match
-                  </span>
+              {/* Match % — ProgressRing replaces text pill (it's fundamentally a percentage) */}
+              <div className={cn("p-3 rounded-xl border space-y-2", isLight ? "bg-slate-50 border-slate-200" : "bg-slate-800/40 border-slate-700/60")}>
+                <div className="flex items-center justify-between gap-2">
+                  <span className={cn("font-bold text-xs leading-snug", isLight ? "text-slate-900" : "text-slate-100")}>Google AI HackMIT 2026</span>
+                  {/* Small radial progress ring instead of text pill */}
+                  <div className="flex-shrink-0 text-emerald-400">
+                    <ProgressRing value={94} size={36} strokeWidth={4} />
+                  </div>
                 </div>
 
-                <div className={cn("text-[10px] font-semibold space-x-1.5 pt-0.5", isLight ? "text-slate-600" : "text-slate-400")}>
-                  <span>Matches profile:</span>
-                  <span className="text-emerald-500 font-bold">✓ AI</span>
-                  <span className="text-emerald-500 font-bold">✓ Open Source</span>
+                <div className={cn("text-[10px] font-semibold space-x-1.5", isLight ? "text-slate-600" : "text-slate-400")}>
+                  <span>Matches:</span>
+                  <span className="text-emerald-400 font-bold">✓ AI</span>
+                  <span className="text-emerald-400 font-bold">✓ Open Source</span>
                 </div>
 
-                <div className="text-[10px] text-amber-500 dark:text-amber-400 font-bold pt-0.5 font-numeric">+1,000 XP Reward</div>
+                <div className="stat-number text-[10px] font-bold" style={{ color: '#F5A623' }}>+1,000 XP Reward</div>
               </div>
 
-              <div className={cn("p-3 rounded-xl border space-y-1.5", isLight ? "bg-slate-50 border-slate-200" : "bg-slate-800/40 border-slate-700/60")}>
-                <div className="flex items-center justify-between">
-                  <span className={cn("font-bold text-xs", isLight ? "text-slate-900" : "text-slate-100")}>ACM AlgoWars Grand Prix</span>
-                  <span className="text-[9px] font-black text-amber-500 bg-amber-500/10 px-1.5 py-0.5 rounded border border-amber-500/20 font-numeric">
-                    88% Match
-                  </span>
+              <div className={cn("p-3 rounded-xl border space-y-2", isLight ? "bg-slate-50 border-slate-200" : "bg-slate-800/40 border-slate-700/60")}>
+                <div className="flex items-center justify-between gap-2">
+                  <span className={cn("font-bold text-xs leading-snug", isLight ? "text-slate-900" : "text-slate-100")}>ACM AlgoWars Grand Prix</span>
+                  <div className="flex-shrink-0 text-emerald-400">
+                    <ProgressRing value={88} size={36} strokeWidth={4} />
+                  </div>
                 </div>
 
-                <div className={cn("text-[10px] font-semibold space-x-1.5 pt-0.5", isLight ? "text-slate-600" : "text-slate-400")}>
-                  <span>Matches profile:</span>
-                  <span className="text-emerald-500 font-bold">✓ C++</span>
-                  <span className="text-emerald-500 font-bold">✓ Algorithms</span>
+                <div className={cn("text-[10px] font-semibold space-x-1.5", isLight ? "text-slate-600" : "text-slate-400")}>
+                  <span>Matches:</span>
+                  <span className="text-emerald-400 font-bold">✓ C++</span>
+                  <span className="text-emerald-400 font-bold">✓ Algorithms</span>
                 </div>
 
-                <div className="text-[10px] text-amber-500 dark:text-amber-400 font-bold pt-0.5 font-numeric">+750 XP Reward</div>
+                <div className="stat-number text-[10px] font-bold" style={{ color: '#F5A623' }}>+750 XP Reward</div>
               </div>
             </div>
           </GlassCard>

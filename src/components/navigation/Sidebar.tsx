@@ -18,6 +18,7 @@ import {
   Plus,
 } from 'lucide-react';
 import { useApp, ScreenType } from '@/context/AppContext';
+import { BrandLogo } from '@/components/ui/BrandLogo';
 import { cn } from '@/lib/utils';
 
 interface SidebarProps {
@@ -77,31 +78,12 @@ export const Sidebar: React.FC<SidebarProps> = ({ mobileOpen = false, onMobileCl
     <div className="flex flex-col h-full py-5 px-3.5 select-none">
       {/* Brand Header */}
       <div className="flex items-center justify-between px-2 pb-6 border-b border-white/[0.06]">
-        <div
+        <BrandLogo
           onClick={() => {
             setActiveScreen('dashboard');
             if (onMobileClose) onMobileClose();
           }}
-          className="flex items-center space-x-3 cursor-pointer group"
-        >
-          <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-blue-500 via-indigo-500 to-purple-500 p-0.5 shadow-md shadow-blue-500/20 group-hover:scale-105 transition-transform">
-            <div className="w-full h-full rounded-[10px] bg-[#0B1020] flex items-center justify-center">
-              <svg className="w-4 h-4 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5 12 2" />
-                <line x1="12" y1="22" x2="12" y2="15.5" />
-                <polyline points="22 8.5 12 15.5 2 8.5" />
-                <polyline points="12 2 12 8.5" />
-              </svg>
-            </div>
-          </div>
-
-          <div>
-            <span className={cn('font-black tracking-tight text-sm block leading-none', isLight ? 'text-slate-900' : 'text-white')}>
-              Student Hub
-            </span>
-            <span className="text-[10px] text-blue-400 font-semibold uppercase tracking-wider">Reputation Engine</span>
-          </div>
-        </div>
+        />
 
         {onMobileClose && (
           <button onClick={onMobileClose} className="p-1 rounded-lg hover:bg-white/10 text-slate-400 md:hidden">
